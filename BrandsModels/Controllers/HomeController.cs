@@ -1,4 +1,4 @@
-﻿using BrandsModels.Models;
+﻿using BrandsModels.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
