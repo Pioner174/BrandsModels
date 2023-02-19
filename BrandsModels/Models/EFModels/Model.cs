@@ -11,5 +11,7 @@ namespace BrandsModels.Models.EFModels
 
         [Range(1, int.MaxValue, ErrorMessage = "Укажите бренд")]
         public int BrandId { get; set; }
+
+        public Brand Brand { get; set; }
     }
 }
