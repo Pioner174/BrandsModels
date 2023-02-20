@@ -1,29 +1,24 @@
 using BrandsModels.Models;
-using BrandsModels.Resources;
+using BrandsModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 using System.Resources;
 using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddLocalization(opts =>
-{
-    opts.ResourcesPath = "Resources";
-});
 
 // Add services to the container.
-builder.Services.AddControllersWithViews().
-    AddDataAnnotationsLocalization(opts =>
-    {
-        opts.DataAnnotationLocalizerProvider = (type, factory) =>
-            factory.Create(typeof(ValidationMessages));
-    });
+builder.Services.AddMvc();
 
 builder.Services.AddDbContext<DataContext>(opts =>
 {

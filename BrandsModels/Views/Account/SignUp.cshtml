@@ -7,7 +7,7 @@
 
 
 <form asp-action="SignUp" method="post">
-    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+    <div class="text-danger" asp-validation-summary="All"></div>
     <div class="mb-3">
         <label for="Login" class="form-label">Login</label>
         <input type="text" class="form-control" id="Login" name="Login" value="@Model.Login">

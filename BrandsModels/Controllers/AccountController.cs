@@ -40,10 +40,6 @@ namespace BrandsModels.Controllers
         {
             if (ModelState.IsValid)
             {
-                //if(_userManager.FindByEmailAsync(viewModel.Email) != null)
-                //{
-
-                //}
 
                 IdentityUser user = new IdentityUser() { UserName = viewModel.Login, Email = viewModel.Email };
 
@@ -61,6 +57,16 @@ namespace BrandsModels.Controllers
                 }
             }
             return View(viewModel);
+        }
+
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult UniqueEmail(string email)
+        {
+            if(_userManager.FindByEmailAsync(email) != null)
+            {
+                return Json($"{email} уже есть в системе, попробуйте востановить пароль");
+            }
+            return Json(true);
         }
     }
 }
