@@ -65,5 +65,26 @@ namespace BrandsModels.Controllers
             return RedirectToAction("Brands");
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Models(bool group = false, int page = 1, int pageSize = 10)
+        {
+            IQueryable<Model> modelsQuery = _context.Models.Include(m => m.Brand);
+
+            if(group)
+                modelsQuery = modelsQuery.OrderBy(m => m.Brand.Name);
+
+            var models = await modelsQuery.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            var totalCount = modelsQuery.Count();
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+            ViewBag.Page = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.GroupBy = group;
+
+            return View(models);
+        }
+
     }
 }
