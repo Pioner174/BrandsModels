@@ -3,16 +3,27 @@
     ViewBag.Title = "Список марок";
 }
 
-<h6 class="bg-primary text-white text-center m-2 p-2">Таблица продуктов</h6>
+<h6 class="bg-primary text-white text-center m-2 p-2">Таблица Брендов</h6>
 <div class="m-2">
-    <table class="table table-sm table-striped table-bordered">
-        <thead><tr><th>Название</th><th></th></tr></thead>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Название</th>
+                <th scope="col" style="width:150px">Редактировать</th>
+            </tr>
+        </thead>
         <tbody>
             @foreach (Brand p in Model)
             {
-                    <partial name="_RowPartial" model="p" />
+                    <tr style="background-color: @((p.IsActive) ? "inherit":"#d3d3d3")">
+                        <td>@p.Name</td>
+                                <td><a href="/Data/EditOrCreateBrand/@p.Id" class="btn btn-secondary btn-sm">Редактировать</a></td>
+                    </tr>
             }
         </tbody>
     </table>
-    <a asp-page="/suppliers/list" class="btn btn-secondary">Suppliers</a>
+    <div class="d-flex justify-content-end">
+        <a asp-controller="Data" asp-action="EditOrCreateBrand" class="btn btn-primary">Добавить марку</a>
+    </div>
+    
 </div>
