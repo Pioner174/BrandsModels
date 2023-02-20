@@ -4,10 +4,10 @@ namespace BrandsModels.Models.ViewModels
 {
     public class SignInViewModel
     {
-        [Required]
+        [Required(ErrorMessage ="Введите логин или email")]
         public string Name { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Введите пароль")]
         public string Password { get; set; }
 
         public string ReturnUrl { get; set; }

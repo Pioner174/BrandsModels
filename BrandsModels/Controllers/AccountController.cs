@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace BrandsModels.Controllers
 {
@@ -13,13 +17,13 @@ namespace BrandsModels.Controllers
 
         private UserManager<IdentityUser> _userManager;
 
-        private IConfiguration configuration;
+        private IConfiguration _configuration;
 
         public AccountController(SignInManager<IdentityUser> signinManager, UserManager<IdentityUser> userManager, IConfiguration configuration)
         {
             _signinManager = signinManager;
             _userManager = userManager;
-            this.configuration = configuration;
+            this._configuration = configuration;
         }
 
 
@@ -27,7 +31,7 @@ namespace BrandsModels.Controllers
         /// Получение формы регистрации
         /// </summary>
         /// <returns></returns>
-        
+
         [HttpGet]
         public IActionResult SignUp()
         {
@@ -64,5 +68,50 @@ namespace BrandsModels.Controllers
         {
             return View(new SignInViewModel { ReturnUrl = returnUrl });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignIn([FromForm] SignInViewModel viewModel)
+        {
+            IdentityUser user = await _userManager.FindByEmailAsync(viewModel.Name) ?? await _userManager.FindByNameAsync(viewModel.Name);
+
+            if (user != null)
+            {
+                var result = await _signinManager.PasswordSignInAsync(user, viewModel.Password, false, false);
+
+                if (result.Succeeded)
+                {
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var key = Encoding.ASCII.GetBytes(_configuration["jwtSecret"]);
+
+                    var tokenDescriptor = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(new Claim[]
+                        {
+                        new Claim(ClaimTypes.Name, user.UserName),
+                        new Claim(ClaimTypes.Email, user.Email)
+                        }),
+                        Expires = DateTime.UtcNow.AddDays(1),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                    };
+
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
+                    var tokenString = tokenHandler.WriteToken(token);
+
+                    return Redirect(viewModel?.ReturnUrl ?? "/");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Неправельный логин или пароль");
+
+                    return View(viewModel);
+                }
+
+            }
+            ModelState.AddModelError("", "Пользователя с таким логином или почтой не обнаруженн");
+
+            return View(viewModel);
+        }
+
     }
 }

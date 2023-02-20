@@ -1,24 +1,26 @@
-﻿
-<main class="form-signin text-center">
-  <form class="mb-3">
+﻿@model  SignInViewModel
+@{
+    ViewBag.Title = "Войти на сайт";
+}
+
+
+
+  <form class="text-center" asp-action="SignIn" method="post">
     <img class="mb-4" src="/lib/image/bootstrap-logo.svg" alt="" width="72" height="57">
-    <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+    <h1 class="h3 mb-3 fw-normal">Пожалуйста, введите данные для входа на сайт</h1>
 
     <div class="form-floating mb-3">
-      <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-      <label for="floatingInput">Email address</label>
+      <input type="text" class="form-control" asp-for="Name" placeholder="name@example.com">
+      <label for="floatingInput">Email or Login</label>
+      <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div class="form-floating mb-3">
-      <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+      <input type="password" class="form-control" asp-for="Password" placeholder="Password">
       <label for="floatingPassword">Password</label>
+      <span asp-validation-for="Password" class="text-danger"></span>
     </div>
 
-    <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"> Remember me
-      </label>
-    </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+    <button class="w-50 btn btn-lg btn-primary" asp-action="SignIn">Войти</button>
     <p class="mt-5 mb-3 text-muted">© 2017–2021</p>
   </form>
-</main>
+
