@@ -51,13 +51,13 @@
 
         <div class="text-end">
           <button type="button" class="btn btn-outline-light me-2">Login</button>
-          <button type="button" class="btn btn-warning">Sign-up</button>
+          <a type="button" class="btn btn-warning" asp-controller="Account" asp-action="SignUp">Sign-up</a>
         </div>
       </div>
     </div>
   </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3 m-3">
             @RenderBody()
         </main>
     </div>

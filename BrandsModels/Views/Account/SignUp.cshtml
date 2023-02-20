@@ -1,0 +1,32 @@
+﻿@model RegisterViewModel
+@{
+    ViewBag.Title = "Регистрация";
+}
+
+<h2>Регистрация</h2>
+
+
+<form asp-action="SignUp" method="post">
+    <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+    <div class="mb-3">
+        <label for="Login" class="form-label">Login</label>
+        <input type="text" class="form-control" id="Login" name="Login" value="@Model.Login">
+        <span asp-validation-for="Login" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="Email" class="form-label">Email адрес</label>
+        <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+     <div class="mb-3">
+        <label for="Password" class="form-label">Пароль</label>
+        <input type="password" class="form-control" id="Password" name="Password">
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="PasswordConfirm" class="form-label">Подтвердите пароль</label>
+        <input type="password" class="form-control" id="PasswordConfirm" name="PasswordConfirm">
+        <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+</form>
