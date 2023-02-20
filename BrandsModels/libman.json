@@ -11,6 +11,31 @@
         "css/bootstrap.min.css",
         "css/bootstrap.min.css.map"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery@3.6.3",
+      "destination": "wwwroot/lib/jquery363/",
+      "files": [
+        "jquery.min.js",
+        "jquery.min.map"
+      ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery-validate@1.19.5",
+      "destination": "wwwroot/lib/jquery-validate1195/",
+      "files": [
+        "jquery.validate.min.js"
+      ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery-validation-unobtrusive@4.0.0",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive400/",
+      "files": [
+        "jquery.validate.unobtrusive.min.js"
+      ]
     }
   ]
 }

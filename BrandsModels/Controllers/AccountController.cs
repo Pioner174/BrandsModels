@@ -59,14 +59,14 @@ namespace BrandsModels.Controllers
             return View(viewModel);
         }
 
-        [AcceptVerbs("GET", "POST")]
-        public IActionResult UniqueEmail(string email)
-        {
-            if(_userManager.FindByEmailAsync(email) != null)
-            {
-                return Json($"{email} уже есть в системе, попробуйте востановить пароль");
-            }
-            return Json(true);
-        }
+        //[AcceptVerbs("GET", "POST")]
+        //public IActionResult UniqueEmail(string email)
+        //{
+        //    if (_userManager.FindByEmailAsync(email) != null)
+        //    {
+        //        return Json($"{email} уже есть в системе, попробуйте востановить пароль");
+        //    }
+        //    return Json(true);
+        //}
     }
 }

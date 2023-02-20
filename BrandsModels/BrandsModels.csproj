@@ -16,10 +16,4 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\DataAnnotationsMessages.resx">
-      <Generator></Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-
 </Project>

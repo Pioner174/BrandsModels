@@ -9,7 +9,7 @@ namespace BrandsModels.Models.ViewModels
         public string Login { get; set; }
 
         [Required(ErrorMessage = "Введите Email")]
-        [Remote("UniqueEmail", "Account", AdditionalFields = nameof(Email))]
+        [Remote(action: "UniqueEmail", controller: "Validation")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Введите пароль")]
