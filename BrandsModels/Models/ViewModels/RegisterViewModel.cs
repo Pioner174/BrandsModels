@@ -6,6 +6,7 @@ namespace BrandsModels.Models.ViewModels
     public class RegisterViewModel
     {
         [Required(ErrorMessage = "Введите Login")]
+        [Remote(action: "UniqueLogin", controller: "Validation")]
         public string Login { get; set; }
 
         [Required(ErrorMessage = "Введите Email")]

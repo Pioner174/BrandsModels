@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.InteropServices;
 
 namespace BrandsModels.Controllers
 {
@@ -16,7 +17,7 @@ namespace BrandsModels.Controllers
             _userManager = userManager;
         }
 
-        [AcceptVerbs("Get", "Post")]
+        [HttpGet("uniqueemail")]
         public async Task<IActionResult> UniqueEmail(string? email)
         {
             if (await _userManager.FindByEmailAsync(email) == null)
@@ -26,6 +27,19 @@ namespace BrandsModels.Controllers
             else
             {
                 return Json($"Email {email} уже используется в системе");
+            }
+        }
+
+        [HttpGet("uniquelogin")]
+        public async Task<IActionResult> UniqueLogin(string? login)
+        {
+            if (await _userManager.FindByNameAsync(login) == null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"Логин {login} уже занят");
             }
         }
     }

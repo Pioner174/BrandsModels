@@ -58,5 +58,11 @@ namespace BrandsModels.Controllers
             }
             return View(viewModel);
         }
+
+        [HttpGet]
+        public IActionResult SignIn(string returnUrl)
+        {
+            return View(new SignInViewModel { ReturnUrl = returnUrl });
+        }
     }
 }
