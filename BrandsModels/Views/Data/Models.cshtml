@@ -1,4 +1,6 @@
-﻿
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+
 @model List<Model>
 
 @{
@@ -7,87 +9,74 @@
 
 <h1>Список Моделей</h1>
 
-<p>
-    @if (ViewBag.GroupBy)
-    {
-            <a asp-action="Models" asp-route-group="false">Не групировать</a>
-    }
-    else
-    {
-            <a asp-action="Models" asp-route-group="true">Групировать по бренду</a>
-    }
-</p>
-
-<p>
-    <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="groupToggle" name="group" value="true" @(ViewBag.GroupBy ? "checked" : "")>
-        <label class="form-check-label" for="groupToggle">
-            @(ViewBag.GroupBy ? "Группировать по бренду" : "Не группировать")
-        </label>
-    </div>
-</p>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                Id
+                #
             </th>
             <th>
                 Модель
             </th>
             <th>
-                <p>
-                    @if (ViewBag.GroupBy)
-                    {
-                        <a asp-action="Models" asp-route-group="false">Бренд</a>
-                    }
-                    else
-                    {
-                        <a asp-action="Models" asp-route-group="true">Бренд</a>
-                    }
-                </p>
+                @if (ViewBag.GroupBy)
+                {
+                    <a asp-action="Models" asp-route-group="false">Бренд</a>
+                }
+                else
+                {
+                    <a asp-action="Models" asp-route-group="true">Бренд</a>
+                }
             </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var model in Model)
+        @foreach (var modelAuto in Model)
         {
-                <tr>
+                        <tr style="background-color: @((modelAuto.IsActive) ? "inherit":"#d3d3d3")">
                     <td>
-                    @Html.DisplayFor(m => model.Id)
+                    @modelAuto.Id
                     </td>
                     <td>
-                    @Html.DisplayFor(m => model.Name)
+                    @modelAuto.Name
                     </td>
                     <td>
-                    @Html.DisplayFor(m => model.Brand.Name)
+                    @modelAuto.Brand.Name
                     </td>
+                    <td><a href="/Data/EditOrCreateModel/@modelAuto.Id" >Изменить</a></td>
                 </tr>
         }
     </tbody>
 </table>
 
 <nav aria-label="Page navigation example">
-    <ul class="pagination">
-        @if (ViewBag.Page > 1)
-        {
-                <li class="page-item"><a class="page-link" href="@Url.Action("Models", new { page = ViewBag.Page - 1, pageSize = ViewBag.PageSize, group = ViewBag.GroupBy })">Previous</a></li>
-        }
-        @for (int i = 1; i <= ViewBag.TotalPages; i++)
-        {
-            if (i == ViewBag.Page)
+    <div>
+        <ul class="pagination">
+            @if (ViewBag.Page > 1)
             {
-                        <li class="page-item active"><a class="page-link" href="@Url.Action("Models", new { page = i, pageSize = ViewBag.PageSize, group = ViewBag.GroupBy })">@i</a></li>
+                    <li class="page-item"><a class="page-link" href="@Url.Action("Models", new { page = ViewBag.Page - 1, pageSize = ViewBag.PageSize, group = ViewBag.GroupBy })">Previous</a></li>
             }
-            else
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
             {
-                        <li class="page-item"><a class="page-link" href="@Url.Action("Models", new { page = i, pageSize = ViewBag.PageSize, group = ViewBag.GroupBy })">@i</a></li>
+                if (i == ViewBag.Page)
+                {
+                            <li class="page-item active"><a class="page-link" href="@Url.Action("Models", new { page = i, pageSize = ViewBag.PageSize, group = ViewBag.GroupBy })">@i</a></li>
+                }
+                else
+                {
+                            <li class="page-item"><a class="page-link" href="@Url.Action("Models", new { page = i, pageSize = ViewBag.PageSize, group = ViewBag.GroupBy })">@i</a></li>
+                }
             }
-        }
-        @if (ViewBag.Page < ViewBag.TotalPages)
-        {
-                <li class="page-item"><a class="page-link" href="@Url.Action("Models", new { page = ViewBag.Page + 1, pageSize = ViewBag.PageSize, group = ViewBag.GroupBy })">Next</a></li>
-        }
-    </ul>
+            @if (ViewBag.Page < ViewBag.TotalPages)
+            {
+                    <li class="page-item"><a class="page-link" href="@Url.Action("Models", new { page = ViewBag.Page + 1, pageSize = ViewBag.PageSize, group = ViewBag.GroupBy })">Next</a></li>
+            }
+
+        </ul>
+        <div class="d-flex justify-content-end">
+            <a asp-controller="Data" asp-action="EditOrCreateModel" class="btn btn-primary">Добавить Модель</a>
+        </div>
+    </div>
 </nav>

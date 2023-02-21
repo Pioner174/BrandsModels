@@ -3,13 +3,13 @@
     ViewBag.Title = "Список марок";
 }
 
-<h6 class="bg-primary text-white text-center m-2 p-2">Таблица Брендов</h6>
+<h1 class="m-2 p-2">Список Брендов</h1>
 <div class="m-2">
-    <table class="table table-bordered table-hover">
+    <table class="table table-bordered table-hover ">
         <thead>
             <tr>
                 <th scope="col">Название</th>
-                <th scope="col" style="width:150px">Редактировать</th>
+                <th scope="col" style="width:130px"></th>
             </tr>
         </thead>
         <tbody>
@@ -23,7 +23,7 @@
         </tbody>
     </table>
     <div class="d-flex justify-content-end">
-        <a asp-controller="Data" asp-action="EditOrCreateBrand" class="btn btn-primary">Добавить марку</a>
+        <a asp-controller="Data" asp-action="EditOrCreateBrand" class="btn btn-primary">Добавить бренд</a>
     </div>
     
 </div>

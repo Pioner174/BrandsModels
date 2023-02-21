@@ -3,9 +3,11 @@ using BrandsModels.Models.EFModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing.Drawing2D;
 
 namespace BrandsModels.Controllers
 {
+    [AllowAnonymous]
     public class DataController : Controller
     {
         private DataContext _context;
@@ -16,7 +18,6 @@ namespace BrandsModels.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Brands()
         {
             IEnumerable<Brand> brands = _context.Brands;
@@ -24,7 +25,6 @@ namespace BrandsModels.Controllers
         }
 
         [HttpGet("Data/EditOrCreateBrand/{id?}")]
-        [AllowAnonymous]
         public async Task<IActionResult> EditOrCreateBrand(int? id)
         {
             if(id == null)
@@ -42,16 +42,14 @@ namespace BrandsModels.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> EditOrCreateBrand([FromForm] Brand brand)
         {
-            var bdBrand = await _context.Brands.FirstOrDefaultAsync(b=> b.Name== brand.Name);
+            var bdBrand = await _context.Brands.FirstOrDefaultAsync(b=> b.Id == brand.Id);
 
             if(bdBrand == null)
             {
-                Brand newBrand = new Brand() { Name = brand.Name, IsActive = brand.IsActive };
-
-                await _context.Brands.AddAsync(newBrand);
+                brand.Id = 0;
+                await _context.Brands.AddAsync(brand);
             }
             else
             {
@@ -66,8 +64,7 @@ namespace BrandsModels.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> Models(bool group = false, int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Models(bool group = false, int page = 1, int pageSize = 15)
         {
             IQueryable<Model> modelsQuery = _context.Models.Include(m => m.Brand);
 
@@ -84,6 +81,50 @@ namespace BrandsModels.Controllers
             ViewBag.GroupBy = group;
 
             return View(models);
+        }
+
+        [HttpGet("Data/EditOrCreateModel/{id?}")]
+        public async Task<IActionResult> EditOrCreateModel(int? id)
+        {
+            List<Brand> Brands = await _context.Brands.ToListAsync();
+
+            ViewBag.Brands = Brands;
+
+            if (id == null)
+            {
+                return View(new Model());
+            }
+
+            var model = await _context.Models.FindAsync(id);
+
+            if (model == null)
+            {
+                return View(new Model());
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditOrCreateModel([FromForm] Model model)
+        {
+            var bdmodel = await _context.Models.FirstOrDefaultAsync(b => b.Id == model.Id);
+
+            if (bdmodel == null)
+            {
+                model.Id = 0;
+                await _context.Models.AddAsync(model);
+            }
+            else
+            {
+                bdmodel.Name = model.Name;
+                bdmodel.Brand = await _context.Brands.FirstOrDefaultAsync(b => b.Id == model.BrandId) ?? bdmodel.Brand;
+                bdmodel.IsActive = model.IsActive;
+
+                _context.Models.Update(bdmodel);
+            }
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Models");
         }
 
     }

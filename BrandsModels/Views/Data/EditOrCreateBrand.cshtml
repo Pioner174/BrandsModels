@@ -1,32 +1,41 @@
 ﻿@model Brand
 @{
-    ViewBag.Title = "Создание/редактирование марки";
+    if (Model.Id == 0)
+    {
+        ViewBag.Title = "Создание бренда";
+    }
+    else
+    {
+        ViewBag.Title = "Редактирование бренда";
+    }
     var isEdit = Model.Id != 0;
 }
 
-<h2 class="text-center mb-4">@ViewBag.Title</h2>
+<h2 class="mb-4">@ViewBag.Title</h2>
 
 <form asp-action="EditOrCreateBrand" class="row g-3" method="post">
-    @if (isEdit)
-    {
-            <input type="hidden" asp-for="Id" />
-    }
+    
+        @if (isEdit)
+        {
+                <input type="hidden" asp-for="Id" />
+        }
 
     <div class="col-md-6">
-        <label asp-for="Name" class="form-label">Название</label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-
-    <div class="col-md-6">
-        <div class="form-check form-switch mt-5">
-            <input asp-for="IsActive" class="form-check-input" />
-            <label class="form-check-label">Активна</label>
+            <label asp-for="Name" class="form-label">Название</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
         </div>
-    </div>
+
+    <div class="col-md-6 mt-5">
+        <div class="form-check form-switch mt-2">
+                <input asp-for="IsActive" class="form-check-input" />
+                <label class="form-check-label">Активна</label>
+            </div>
+        </div>
 
     <div class="col-md-12">
-        <button asp-action="EditOrCreateBrand" class="btn btn-primary">@((isEdit ? "Сохранить" : "Создать"))</button>
-        <a asp-route="/Brands/List" class="btn btn-secondary ms-2">Отмена</a>
-    </div>
+            <button asp-action="EditOrCreateBrand" class="btn btn-primary">@((isEdit ? "Сохранить" : "Создать"))</button>
+            <a asp-controller="Data" asp-action="Brands" class="btn btn-secondary ms-2">Отмена</a>
+        </div>
+    
 </form>

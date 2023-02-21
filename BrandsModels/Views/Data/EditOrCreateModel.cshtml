@@ -1,0 +1,58 @@
+﻿@model Model
+
+@{
+    if (Model.Id == 0)
+    {
+        ViewBag.Title = "Создание модели";
+    }
+    else
+    {
+        ViewBag.Title = "Редактирование модели";
+    }
+    var isEdit = Model.Id != 0;
+}
+
+<h2 class="text-center mb-4">@ViewBag.Title</h2>
+
+<form asp-action="EditOrCreateBrand" class="row g-3" method="post">
+    @if (isEdit)
+    {
+            <input type="hidden" asp-for="Id" />
+    }
+
+    <div class="col-md-5">
+        <label asp-for="Name" class="form-label">Название</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    @*<div class="col-md-5">
+        <label asp-for="Brand" class="form-label">Бренд</label>
+        <input asp-for="Brand" class="form-control" />
+        <span asp-validation-for="Brand" class="text-danger"></span>
+    </div>
+*@
+    <div class="col-md-5">
+        <label asp-for="BrandId">Бренд</label>
+        <div>
+            <span asp-validation-for="Brand.Name" class="text-danger"></span>
+        </div>
+        <select asp-for="BrandId" class="form-control mt-2" 
+        asp-items="@(new SelectList(ViewBag.Brands,"Id", "Name"))">
+
+            <option value="" disabled selected>Выберите Бренд</option>
+        </select>
+    </div>
+
+    <div class="col-md-5">
+        <div class="form-check form-switch ">
+            <input asp-for="IsActive" class="form-check-input mt-3" />
+            <label class="form-check-label mt-3">Активна</label>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <button asp-action="EditOrCreateModel" class="btn btn-primary">@((isEdit ? "Сохранить" : "Создать"))</button>
+        <a asp-controller="Data" asp-action="Models" class="btn btn-secondary ms-2">Отмена</a>
+    </div>
+</form>
