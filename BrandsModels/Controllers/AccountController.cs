@@ -1,8 +1,10 @@
 ﻿using BrandsModels.Models.ViewModels;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -63,13 +65,13 @@ namespace BrandsModels.Controllers
             return View(viewModel);
         }
 
-        [HttpGet]
+        [HttpGet("Account/Login/{returnUrl?}")]
         public IActionResult SignIn(string returnUrl)
         {
             return View(new SignInViewModel { ReturnUrl = returnUrl });
         }
 
-        [HttpPost]
+        [HttpPost("Account/Login")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignIn([FromForm] SignInViewModel viewModel)
         {
@@ -98,6 +100,19 @@ namespace BrandsModels.Controllers
                     var token = tokenHandler.CreateToken(tokenDescriptor);
                     var tokenString = tokenHandler.WriteToken(token);
 
+                    var cookieOptions = new CookieOptions
+                    {
+                        Expires = DateTime.Now.AddDays(1),
+                        HttpOnly = true,
+                        Secure = true,
+                        SameSite = SameSiteMode.Strict
+                    };
+
+                    Response.Cookies.Append("token", tokenString, cookieOptions);
+                    Response.Cookies.Append("UserName", user.UserName);
+
+                    
+
                     return Redirect(viewModel?.ReturnUrl ?? "/");
                 }
                 else
@@ -111,6 +126,20 @@ namespace BrandsModels.Controllers
             ModelState.AddModelError("", "Пользователя с таким логином или почтой не обнаруженн");
 
             return View(viewModel);
+        }
+
+        [Authorize]
+        public async Task<RedirectResult> Logout(string returnUrl = "/")
+        {
+            await _signinManager.SignOutAsync();
+
+
+            Response.Cookies.Delete("token");
+            Response.Cookies.Delete("UserName");
+
+            ViewBag.UserName = null;
+
+            return Redirect(returnUrl);
         }
 
     }

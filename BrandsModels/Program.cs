@@ -1,4 +1,5 @@
 using BrandsModels.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ builder.Services.AddDbContext<IdentityContext>(opts =>
 });
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<IdentityContext>();
+    .AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();
 
 
 builder.Services.Configure<IdentityOptions>(opts =>
@@ -37,12 +38,19 @@ builder.Services.Configure<IdentityOptions>(opts =>
     opts.Password.RequireDigit = false;
 
     opts.User.RequireUniqueEmail = true; // ѕочта должна быть уникальной у каждого пользовател€
+
+   
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication().AddCookie(cfg =>
+{
+    cfg.SlidingExpiration = true;
+    //cfg.LoginPath = "/Account/SignIn";
+})
     .AddJwtBearer(jwtOpts =>
 {
     jwtOpts.RequireHttpsMetadata = false; // отключаем требование https протокола
+    jwtOpts.SaveToken = true;
 
     jwtOpts.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
     {
@@ -66,10 +74,13 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStaticFiles();
 
+
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseRouting();
+
 
 app.MapControllers();
 app.MapControllerRoute(

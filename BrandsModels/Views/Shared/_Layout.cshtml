@@ -17,20 +17,22 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
+          <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
           <li><a asp-controller="Data" asp-action="Brands" class="nav-link px-2 text-white">Бренды</a></li>
           <li><a asp-controller="Data" asp-action="Models" class="nav-link px-2 text-white">Модели</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
-          <li><a href="#" class="nav-link px-2 text-white">About</a></li>
         </ul>
 
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-          <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
-        </form>
 
         <div class="text-end">
-          <a type="button" class="btn btn-outline-light me-2" asp-controller="Account" asp-action="SignIn">Login</a>
-          <a type="button" class="btn btn-warning" asp-controller="Account" asp-action="SignUp">Sign-up</a>
+            @if (Context.Request.Cookies["UserName"] == null)
+            {
+                <a type="button" class="btn btn-outline-light me-2" asp-controller="Account" asp-action="SignIn">Login</a>
+                <a type="button" class="btn btn-warning" asp-controller="Account" asp-action="SignUp">Sign-up</a>
+            }else{
+                    <a class="text-white m-2">Ваш логин:  @Context.Request.Cookies["UserName"]</a>
+                    <a type="button" class="btn btn-warning" asp-controller="Account" asp-action="Logout">Log-Out</a>
+            }
+          
         </div>
       </div>
     </div>

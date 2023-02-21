@@ -7,7 +7,7 @@ using System.Drawing.Drawing2D;
 
 namespace BrandsModels.Controllers
 {
-    [AllowAnonymous]
+    
     public class DataController : Controller
     {
         private DataContext _context;
@@ -25,6 +25,7 @@ namespace BrandsModels.Controllers
         }
 
         [HttpGet("Data/EditOrCreateBrand/{id?}")]
+        [Authorize]
         public async Task<IActionResult> EditOrCreateBrand(int? id)
         {
             if(id == null)
@@ -42,6 +43,7 @@ namespace BrandsModels.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> EditOrCreateBrand([FromForm] Brand brand)
         {
             var bdBrand = await _context.Brands.FirstOrDefaultAsync(b=> b.Id == brand.Id);
@@ -84,6 +86,7 @@ namespace BrandsModels.Controllers
         }
 
         [HttpGet("Data/EditOrCreateModel/{id?}")]
+        [Authorize]
         public async Task<IActionResult> EditOrCreateModel(int? id)
         {
             List<Brand> Brands = await _context.Brands.ToListAsync();
@@ -105,6 +108,7 @@ namespace BrandsModels.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> EditOrCreateModel([FromForm] Model model)
         {
             var bdmodel = await _context.Models.FirstOrDefaultAsync(b => b.Id == model.Id);
